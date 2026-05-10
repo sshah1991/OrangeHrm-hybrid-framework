@@ -63,7 +63,7 @@ test.describe('This test suite contains test for login module', () => {
         await expect(page).toHaveURL(/.*dashboard/);
     })
 
-    test.only('LOG-02 Sanity Logout Functionality',async({page})=>{
+    test('LOG-02 Sanity Logout Functionality',async({page})=>{
         console.log("************* [Info] Executing TestID: LOG-02 *************")
         const tokenFetched= await loginController.getLoginToken()
         expect(tokenFetched).toBeDefined()
