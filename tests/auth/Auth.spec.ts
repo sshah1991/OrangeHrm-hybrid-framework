@@ -50,11 +50,12 @@ test.describe('This test suite contains test for login module', () => {
         await expect(page).toHaveURL(/.*dashboard/);
     })
 
-    test('LOG-03 Smoke Login with Invalid Password',async({page})=>{
+    test.only('LOG-03 Smoke Login with Invalid Password',async({page})=>{
+        console.log("************* [Info] Executing TestID: LOG-03 *************")
         const response= await authPageObject.dologin(
             process.env.InValid_AdminUserName!,
             process.env.InValid_AdminPassword!
         )
-       console.log(await authPageObject.loginErrorMessage.textContent())
+       await expect(authPageObject.loginErrorMessage).toBeVisible()
     })
 })
