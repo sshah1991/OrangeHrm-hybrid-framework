@@ -28,6 +28,8 @@ jobs:
         BASE_URL: ${{ secrets.BASE_URL }}
         Valid_AdminUserName: ${{ secrets.ADMIN_USER }}
         Valid_AdminPassword: ${{ secrets.ADMIN_PASS }}
+        InValid_AdminUserName: ${{ secrets.INVALID_ADMINUSERNAME }}
+        InValid_AdminPassword: ${{ secrets.INVALID_ADMINPASSWORD }}
         
     - name: Upload Playwright Report
       uses: actions/upload-artifact@v4
