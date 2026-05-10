@@ -17,12 +17,31 @@ jobs:
         
     - name: Install dependencies
       run: npm ci
-      
+
+    # 1. Get the version so the cache key is unique to your Playwright version
+    - name: Get Playwright version
+      id: playwright-version
+      run: echo "version=$(npm ls @playwright/test --json | jq -r '.dependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
+
+    # 2. Check for existing browsers in the cache
+    - name: Cache Playwright browsers
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+
+    # 3. ONLY install browsers if the cache was NOT found
     - name: Install Playwright Browsers
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
+
+    # 4. If cache WAS found, we still need to install system dependencies (fast)
+    - name: Install Playwright Dependencies
+      if: steps.playwright-cache.outputs.cache-hit == 'true'
+      run: npx playwright install-deps
       
     - name: Run Playwright tests
-      # This is where we inject the secrets from GitHub Settings into the Runner
       run: npx playwright test
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
@@ -38,22 +57,3 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
-    
-    - name: Get Playwright version
-      id: playwright-version
-      run: echo "version=$(npm ls @playwright/test --json | jq -r '.dependencies["@playwright/test"].version')" >> $GITHUB_OUTPUT
-
-    - name: Cache Playwright browsers
-      uses: actions/cache@v4
-      id: playwright-cache
-      with:
-        path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
-
-    - name: Install Playwright Browsers
-      if: steps.playwright-cache.outputs.cache-hit != 'true'
-      run: npx playwright install --with-deps
-
-    - name: Install Playwright Dependencies (if cache hit)
-      if: steps.playwright-cache.outputs.cache-hit == 'true'
-      run: npx playwright install-deps

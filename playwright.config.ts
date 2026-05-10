@@ -8,9 +8,12 @@ dotenv.config();
 export default defineConfig({
   testDir: './tests',
   use: {
-    // Set the baseURL here so page.goto("/") works
-    baseURL: process.env.BASE_URL, 
+    baseURL: process.env.BASE_URL,
+    // Runs headless in CI, but headed locally for debugging
+    headless: !!process.env.CI, 
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
   projects: [
     {
