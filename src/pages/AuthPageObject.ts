@@ -11,6 +11,7 @@ export class AuthPageObject {
     readonly userName: Locator
     readonly password: Locator
     readonly loginButton: Locator
+    readonly loginErrorMessage: Locator
 
     /**
      * Constructor initializes the page instance and defines locators using Playwright's Locator API.
@@ -27,6 +28,8 @@ export class AuthPageObject {
         
         // Locates the login button by role, narrowed down by the specific text content
         this.loginButton = page.getByRole('button').filter({ hasText: 'Login' })
+
+        this.loginErrorMessage= page.getByText(/Invalid credentials/i)
     }
 
     /**
@@ -42,7 +45,7 @@ export class AuthPageObject {
      * @param userName - The username string to be entered.
      * @param password - The password string to be entered.
      */
-    async doValidlogin(userName: string, password: string) {
+    async dologin(userName: string, password: string) {
         // Enters the username into the designated textbox
         await this.userName.fill(userName)
         

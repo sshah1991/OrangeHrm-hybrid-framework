@@ -41,12 +41,20 @@ test.describe('This test suite contains test for login module', () => {
         console.log("************* [Info] Executing TestID: LOG-01 *************")
 
         // Perform login action using credentials retrieved from environment variables
-        const response = await authPageObject.doValidlogin(
+        const response = await authPageObject.dologin(
             process.env.Valid_AdminUserName!,
             process.env.Valid_AdminPassword!
         );
         
         // Assertion: Verify that successful login redirects the user to the Dashboard
         await expect(page).toHaveURL(/.*dashboard/);
+    })
+
+    test.only('LOG-03 Smoke Login with Invalid Password',async({page})=>{
+        const response= await authPageObject.dologin(
+            process.env.InValid_AdminUserName!,
+            process.env.InValid_AdminPassword!
+        )
+       console.log(await authPageObject.loginErrorMessage.textContent())
     })
 })
