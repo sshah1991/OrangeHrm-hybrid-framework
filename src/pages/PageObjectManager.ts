@@ -1,8 +1,11 @@
 import { Page } from "playwright";
 import { AuthPageObject } from "./AuthPageObject";
 import { DashboardPageObject } from "./DashboardPageObject";
+import { AdminPageObject } from "./AdminPageObject";
 // 1. Import the LoginController
 import { LoginController } from "../api/controller/LoginController";
+import { EmployeeController } from "../api/controller/EmployeeController";
+import { time } from "node:console";
 
 /**
  * Page Object Manager (POM) Class.
@@ -15,6 +18,8 @@ export class PageObjectManager {
     readonly authPageObject: AuthPageObject
     readonly dashboardPageObject: DashboardPageObject
     readonly loginController: LoginController
+    readonly employeeController: EmployeeController
+    readonly adminPageObject: AdminPageObject
 
     /**
      * Constructor initializes the shared Page instance and instantiates 
@@ -27,7 +32,11 @@ export class PageObjectManager {
         // Initialize AuthPageObject by passing the shared page instance to its constructor
         this.authPageObject = new AuthPageObject(this.page)
         this.dashboardPageObject= new DashboardPageObject(this.page)
+        this.adminPageObject= new AdminPageObject(this.page)
+
         this.loginController=new LoginController(this.page.request)
+        this.employeeController= new EmployeeController(this.page.request)
+        
     }
 
     /**
@@ -41,7 +50,13 @@ export class PageObjectManager {
     getDashboardPageObject(){
         return this.dashboardPageObject
     }
+    getAdminPageObject(){
+        return this.adminPageObject
+    }
     getLoginController(){
         return this.loginController
+    }
+    getEmployeeController(){
+        return this.employeeController
     }
 }
