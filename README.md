@@ -38,6 +38,11 @@ InValid_AdminUserName=invalidUser
 InValid_AdminPassword=invalidPass
 ```
 
+## Test Cases
+
+- Total test cases: 4 (located in the `tests/` folder)
+
+
 The repository already ignores `.env` in `.gitignore`.
 
 ## Running Tests
